@@ -26,7 +26,7 @@ What you need to do is to use IO::Scalar :
 
   use File::MimeInfo::Magic;
   use IO::Scalar;
-  
+
   my $io_scalar = new IO::Scalar \$data;
   my $mimetype = mimetype( $io_scalar );
 
@@ -61,7 +61,7 @@ proper filename.
 
   use File::MimeInfo::Magic qw#mimetype extensions#;
   use File::Copy;
-  
+
   my $tmpfile = '/tmp/foo';
   my $mimetype = mimetype($tmpfile);
   my $extension = extensions($mimetype);
@@ -93,9 +93,9 @@ while leaving other XDG configuration stuff alone.
 
 =head1 AUTHOR
 
-Jaap Karssenberg (Pardus) E<lt>pardus@cpan.orgE<gt>
+Jaap Karssenberg E<lt>pardus@cpan.orgE<gt>
 
-Copyright (c) 2005,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2005, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

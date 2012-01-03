@@ -1,10 +1,7 @@
 #!/usr/bin/perl
 
-eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
-    if 0; # not running under some shell
-
 use strict;
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 $|++;
 
 # ########## #
@@ -43,7 +40,7 @@ while ((@ARGV) && ($ARGV[0] =~ /^-/)) {
 	}
 	elsif ($opt =~ s/^--([\w-]+)(?:=(.*))?/$1/) {
 		if (exists $opts{$opt}) {
-			if ($opts{$opt}[1]) { 
+			if ($opts{$opt}[1]) {
 				my $arg = $2 || shift @ARGV;
 				complain('--'.$opt, 2) unless defined $arg;
 				$args{$opt} .= ( $args{$opt} ? ' ' : '' ) . $arg;
@@ -57,7 +54,7 @@ while ((@ARGV) && ($ARGV[0] =~ /^-/)) {
 			my ($key) = grep { $opts{$_}[0] eq $o } keys %opts;
 			complain($o) unless $key;
 
-			if ($opts{$key}[1]) { 
+			if ($opts{$key}[1]) {
 				my $arg = shift @ARGV;
 				complain('-'.$o, 2) unless defined $arg;
 				$args{$key} .= ( $args{$key} ? ' ' : '' ).$arg; # join with whitespace
@@ -79,7 +76,7 @@ if ($args{help} || $args{usage}) {
 
 if ($args{version}) {
 	print "mimetype $VERSION\n\n", << 'EOV';
-Copyright (c) 2003 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2003, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl.
 
@@ -111,7 +108,7 @@ die $@ if $@;
 if ($args{debug}) {
 	$File::MimeInfo::DEBUG++;
 	$File::MimeInfo::Magic::DEBUG++;
-	print	'> Data dirs are: ', join( ', ', 
+	print	'> Data dirs are: ', join( ', ',
 			$args{database}
 				? ( split /:/, $args{database} )
 				: (
@@ -126,7 +123,7 @@ $args{describe}++ if $args{'file-compat'} && !$args{mimetype};
 
 # --namefile
 if ($args{namefile}) {
-	open IN, $args{namefile} 
+	open IN, $args{namefile}
 		|| die "Couldn't open file: $args{namefile}\n";
 	unshift @ARGV, map {chomp; $_} (<IN>);
 	close IN;
@@ -179,7 +176,7 @@ foreach my $file (@ARGV) {
 	# --dereference
 	my $f = ($args{dereference} && -l $file) ? resolvelink($file) : $file;
 	# --magic-only
-	if ($args{'magic-only'}) { 
+	if ($args{'magic-only'}) {
 		print $format->($file, magic($f) || default($f)), "\n";
 	}
 	# --all
@@ -251,7 +248,7 @@ mimetype [options] [-] files
 =head1 DESCRIPTION
 
 This script tries to determine the mime type of a file using the
-Shared MIME-info database. It is intended as a kind of I<file(1)> work-alike, 
+Shared MIME-info database. It is intended as a kind of I<file(1)> work-alike,
 but uses mimetypes instead of descriptions.
 
 If one symlinks the I<file> command to I<mimetype> it will behave
@@ -261,7 +258,7 @@ implemented the same because of the conflicting data formats.
 Also the wording of the descriptions will differ.
 
 For naming switches I followed the manpage of file(1) version 4.02
-when possible. They seem to differ completely from the spec in the 
+when possible. They seem to differ completely from the spec in the
 'utilities' chapter of IEEE Std 1003.1-2001 (POSIX).
 
 =head1 OPTIONS
@@ -296,18 +293,18 @@ Print debug information about how the mimetype was determined.
 
 =item B<-f> I<namefile>, B<--namefile>=I<namefile>
 
-Read the names of the files to be examined from the file 'namefile' 
+Read the names of the files to be examined from the file 'namefile'
 (one per line) before the argument list.
 
 =item B<--file-compat>
 
 Make mimetype behave a little more L<file(1)> compatible. This
-is turned on automaticly when you call mimetype by a link
+is turned on automatically when you call mimetype by a link
 called 'file'.
 
-A single '-' won't be considered a seperator
+A single '-' won't be considered a separator
 between options and filenames anymore, but becomes identical to L</--stdin>.
-( You can still use '--' as seperator, but
+( You can still use '--' as separator, but
 that is not backward compatible with the original file command. )
 Also the default becomes to print descriptions instead of mimetypes.
 
@@ -360,7 +357,7 @@ you need to post-process the output to do that.
 
 =item B<--stdin>
 
-Determine type of content from STDIN, less powerfull then normal file checking
+Determine type of content from STDIN, less powerful then normal file checking
 because it only uses magic typing. This will happen also if the STDIN filehandle
 is a pipe.
 
@@ -380,16 +377,16 @@ Print the version of the program and exit.
 
 =item XDG_DATA_DIRS
 
-These variables can list base directories to search for data files. The shared 
+These variables can list base directories to search for data files. The shared
 mime-info will be expected in the "mime" sub directory of one of these
-directories. If these are not set, there will be searched for the 
+directories. If these are not set, there will be searched for the
 following directories:
 
 	$HOME/.local/share/mime
 	/usr/local/share/mime
 	/usr/share/mime
 
-See also the "XDG Base Directory Specification" 
+See also the "XDG Base Directory Specification"
 L<http://freedesktop.org/Standards/basedir-spec>
 
 =back
@@ -424,7 +421,7 @@ L</--describe> switch.
 =head1 DIAGNOSTICS
 
 If a file has an empty mimetype or an empty description,
-most probably the file doesn't exist and the given name 
+most probably the file doesn't exist and the given name
 doesn't match any globs. An empty description can also mean that
 there is no description available in the language you specified.
 
@@ -443,7 +440,7 @@ No known bugs, please mail the author if you find one.
 
 B<mimetype> doesn't provide a switch for looking inside compressed files
 because it seems to me that this can only be done by un-compressing the file,
-something that defeats the purpose. On the other hand the option should 
+something that defeats the purpose. On the other hand the option should
 exist for strict compatibility with file(1). Possibly a subclass should be
 made for this one day.
 
@@ -453,7 +450,7 @@ Jaap Karrssenberg E<lt>pardus@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2003, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl.
 
@@ -467,4 +464,3 @@ L<file(1)>,
 L<update-mime-database(1)>,
 L<File::MimeInfo(3)>,
 L<http://freedesktop.org/Software/shared-mime-info>
-

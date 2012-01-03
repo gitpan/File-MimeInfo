@@ -18,12 +18,23 @@ use_ok('File::MimeInfo', qw/mimetype describe globs/); # 1
 
 # test _glob_to_regexp
 my $i = 0;
-for (
-	[ '*.pl',	'(?-xism:^.*\.pl$)'	],	# 4
-	[ '*.h++',	'(?-xism:^.*\.h\+\+$)'	],	# 5
-	[ '*.[tar].*',	'(?-xism:^.*\.[tar]\..*$)'],	# 6
-	[ '*.?',	'(?-xism:^.*\..?$)'],		# 7
-) { is( File::MimeInfo::_glob_to_regexp($_->[0]), $_->[1], 'glob '.++$i ) }
+for my $glob (
+  [ '*.pl',      [ '(?-xism:^.*\.pl$)',        '(?^u:^.*\.pl$)' ] ],           # 4
+  [ '*.h++',     [ '(?-xism:^.*\.h\+\+$)',     '(?^u:^.*\.h\+\+$)' ] ],        # 5
+  [ '*.[tar].*', [ '(?-xism:^.*\.[tar]\..*$)', '(?^u:^.*\.[tar]\..*$)' ] ],    # 6
+  [ '*.?',       [ '(?-xism:^.*\..?$)',        '(?^u:^.*\..?$)' ] ],           # 7
+  )
+{
+  my $converted = File::MimeInfo::_glob_to_regexp( $glob->[0] );
+  my $number    = ++$i;
+  if ( my ($match) = grep { $_ eq "$converted" } @{ $glob->[1] } ) {
+    pass( 'glob ' . $number . ' matches an expected value' );
+    note explain $match;
+    next;
+  }
+  fail( 'glob ' . $number . ' matches an expected value' );
+  diag explain { got => "$converted", expected_one_of => $glob->[1] };
+}
 
 # test parsing file names
 $i = 0;

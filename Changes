@@ -1,6 +1,14 @@
 Revision history for Perl extension File::MimeInfo.
 Jaap Karssenberg <pardus@cpan.org>
 
+0.16  Tue Jan 03 2012
+      - Fixed test suite for perl 5.13 and newer (RT 66841) - Kent Fredric
+      - Fixed typos in documentation (RT 70171, 39974) - Gregor Herrman
+      - Fixed bug for files named "0" (RT 41031)
+      - Cleaned up mimetype script (RT 64421)
+      - Removed unessecary error code (RT 66527)
+      - Removed illogical behavior for derefereencing symlinks (RT 58575)
+
 0.15  Wed Feb 13 2008
       A special thanks to Chapman Flack for bug reports and patches.
       - Added some empty pod declarations to satisfy Pod::Coverage (RT 33099)

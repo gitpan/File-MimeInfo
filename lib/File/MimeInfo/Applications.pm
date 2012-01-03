@@ -8,7 +8,7 @@ use File::MimeInfo qw/mimetype_canon mimetype_isa/;
 use File::DesktopEntry;
 require Exporter;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
@@ -19,7 +19,7 @@ our @EXPORT = qw(
 print STDERR << 'EOT' unless data_files(qw/applications mimeinfo.cache/);
 WARNING: You don't seem to have any mimeinfo.cache files.
 Try running the update-desktop-database command. If you
-don't have this command you should install the 
+don't have this command you should install the
 desktop-file-utils package. This package is available from
 http://freedesktop.org/wiki/Software_2fdesktop_2dfile_2dutils
 EOT
@@ -28,7 +28,7 @@ sub mime_applications {
 	croak "usage: mime_applications(MIMETYPE)" unless @_ == 1;
 	my $mime = mimetype_canon(shift @_);
 	local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-	return wantarray ? (_default($mime), _others($mime)) : _default($mime); 
+	return wantarray ? (_default($mime), _others($mime)) : _default($mime);
 }
 
 sub mime_applications_all {
@@ -85,7 +85,7 @@ sub _default {
 	my $mimetype = shift;
 	my $file = data_home(qw/applications defaults.list/);
 	return undef unless -f $file && -r _;
-	
+
 	$Carp::CarpLevel++;
 	my @list = _read_list($mimetype, $file);
 	my $desktop_file = _find_file(reverse @list);
@@ -96,7 +96,7 @@ sub _default {
 
 sub _others {
 	my $mimetype = shift;
-	
+
 	$Carp::CarpLevel++;
 	my (@list, @done);
 	for my $dir (data_dirs('applications')) {
@@ -163,7 +163,7 @@ sub _find_file {
 sub _mkdir {
 	my $dir = shift;
 	return if -d $dir;
-	
+
 	my ($vol, $dirs, undef) = File::Spec->splitpath($dir);
 	my @dirs = File::Spec->splitdir($dirs);
 	my $path = File::Spec->catpath($vol, shift @dirs);
@@ -171,7 +171,7 @@ sub _mkdir {
 		mkdir $path; # fails silently
 		$path = File::Spec->catdir($path, shift @dirs);
 	}
-	
+
 	die "Could not create dir: $path\n" unless -d $path;
 }
 
@@ -187,13 +187,13 @@ File::MimeInfo::Applications - Find programs to open a file by mimetype
 
   use File::MimeInfo::Magic;
   use File::MimeInfo::Applications;
-  
+
   my $file = '/foo/bar';
   my $mimetype = mimetype($file)
       || die "Could not find mimetype for $file\n";
-      
+
   my ($default, @other) = mime_applications($mimetype);
-  
+
   if (defined $default) {
       $default->system($file)
   }
@@ -206,7 +206,7 @@ File::MimeInfo::Applications - Find programs to open a file by mimetype
 
 This module tries to find applications that can open files
 with a certain mimetype. This is done in the way suggested by
-the freedesktop Desktop Entry specification. This module is 
+the freedesktop Desktop Entry specification. This module is
 intended to be compatible with file managers and other applications that
 implement this specification.
 
@@ -218,7 +218,7 @@ new .desktop files.
 See L<http://www.freedesktop.org/wiki/Software/desktop-file-utils>.
 
 At the moment of writing this module is compatible with the way Nautilus (Gnome)
-and with Thunar (XFCE) handle applications for mimetypes. I understand KDE 
+and with Thunar (XFCE) handle applications for mimetypes. I understand KDE
 is still working on implementing the freedesktop mime specifications but will
 follow. At the very least all perl applications using this module are using
 the same defaults.
@@ -243,7 +243,7 @@ to use.
 
 =item C<mime_applications_all(MIMETYPE)>
 
-Like C<mime_applications()> but also takes into account applications that 
+Like C<mime_applications()> but also takes into account applications that
 can open mimetypes from which MIMETYPE inherits. Parent mimetypes tell
 aomething about the data format, all code inherits from text/plain for example.
 
@@ -253,7 +253,7 @@ Save a default application for this mimetype. This action will
 affect other applications using the same mechanism to find a default
 appliction.
 
-APPLICATION can either be a File::DesktopEntry object or 
+APPLICATION can either be a File::DesktopEntry object or
 the basename of a .desktop file.
 
 =item C<mime_applications_set_custom(MIMETYPE, COMMAND)>
@@ -282,9 +282,9 @@ Please mail the author when you encounter any bugs.
 
 =head1 AUTHOR
 
-Jaap Karssenberg || Pardus [Larus] E<lt>pardus@cpan.orgE<gt>
+Jaap Karssenberg E<lt>pardus@cpan.orgE<gt>
 
-Copyright (c) 2005,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2005, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

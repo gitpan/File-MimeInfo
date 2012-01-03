@@ -10,11 +10,11 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mimetype);
 our @EXPORT_OK = qw(extensions describe globs inodetype mimetype_canon mimetype_isa);
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 our $DEBUG;
 
 our ($_hashed, $_hashed_aliases, $_hashed_subclasses);
-our (@globs, %literal, %extension, %mime2ext, %aliases, %subclasses); 
+our (@globs, %literal, %extension, %mime2ext, %aliases, %subclasses);
 our ($LANG, @DIRS);
 # @globs = [ [ 'glob', qr//, $mime_string ], ... ]
 # %literal contains literal matches
@@ -31,7 +31,7 @@ sub mimetype {
 	my $file = pop;
 	croak 'subroutine "mimetype" needs a filename as argument' unless defined $file;
 	croak 'You should use File::MimeInfo::Magic to check open filehandles' if ref $file;
-	return 
+	return
 		inodetype($file) ||
 		globs($file)	 ||
 		default($file);
@@ -98,14 +98,14 @@ sub globs {
 sub default {
 	my $file = pop;
 	croak 'subroutine "default" needs a filename as argument' unless defined $file;
-	
+
 	my $line;
 	unless (ref $file) {
 		return undef unless -f $file;
 		print STDERR "> File exists, trying default method\n" if $DEBUG;
 		return 'text/plain' if -z $file;
-	
-		open FILE, '<', $file || return undef;
+
+		open FILE, '<', $file or return undef;
 		binmode FILE, ':utf8' unless $] < 5.008;
 		read FILE, $line, 32;
 		close FILE;
@@ -127,7 +127,7 @@ sub default {
 		else {
 			# use perl to do something intelligent for ascii & utf8
 			return 'text/plain' unless $line =~ /[^[:print:]\s]/;
-		}	
+		}
 	}
 	print STDERR "> First 10 bytes of the file contain control chars\n" if $DEBUG;
 	return 'application/octet-stream';
@@ -162,7 +162,7 @@ sub _hash_globs {
 		chomp;
 		($string, $glob) = split /:/, $_, 2;
 		unless ($glob =~ /[\?\*\[]/) { $literal{$glob} = $string }
-		elsif ($glob =~ /^\*\.(\w+(\.\w+)*)$/) { 
+		elsif ($glob =~ /^\*\.(\w+(\.\w+)*)$/) {
 		    $extension{$1} = $string;
 		    $mime2ext{$string} = [] if !defined($mime2ext{$string});
 		    push @{$mime2ext{$string}}, $1;
@@ -337,7 +337,7 @@ If the file doesn't exist or isn't readable C<undef> is returned.
 
 =item C<inodetype($file)>
 
-Returns a mimetype in the 'inode' namespace or undef when the file is 
+Returns a mimetype in the 'inode' namespace or undef when the file is
 actually a normal file.
 
 =item C<globs($file)>
@@ -367,11 +367,11 @@ for this mimetype.
 =item C<describe($mimetype, $lang)>
 
 Returns a description of this mimetype as supplied by the mime info database.
-You can specify a language with the optional parameter C<$lang>, this should be 
-the two letter language code used in the xml files. Also you can set the global 
+You can specify a language with the optional parameter C<$lang>, this should be
+the two letter language code used in the xml files. Also you can set the global
 variable C<$File::MimeInfo::LANG> to specify a language.
 
-This method returns undef when no xml file was found (i.e. the mimetype 
+This method returns undef when no xml file was found (i.e. the mimetype
 doesn't exist in the database). It returns an empty string when the xml file doesn't
 contain a description in the language you specified.
 
@@ -421,9 +421,9 @@ Rehashes the F<mime/subclasses> files.
 
 This module throws an exception when it can't find any data files, when it can't
 open a data file it found for reading or when a subroutine doesn't get enough arguments.
-In the first case you either don't have the freedesktop mime info database installed, 
+In the first case you either don't have the freedesktop mime info database installed,
 or your environment variables point to the wrong places,
-in the second case you have the database installed, but it is broken 
+in the second case you have the database installed, but it is broken
 (the mime info database should logically be world readable).
 
 =head1 TODO
@@ -450,9 +450,9 @@ Please mail the author when you encounter any bugs.
 
 =head1 AUTHOR
 
-Jaap Karssenberg || Pardus [Larus] E<lt>pardus@cpan.orgE<gt>
+Jaap Karssenberg E<lt>pardus@cpan.orgE<gt>
 
-Copyright (c) 2003,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2003, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

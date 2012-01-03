@@ -30,7 +30,7 @@ while ((@ARGV) && ($ARGV[0] =~ /^-/)) {
 	}
 	elsif ($opt =~ s/^--([\w-]+)(?:=(.*))?/$1/) {
 		if (exists $opts{$opt}) {
-			if ($opts{$opt}[1]) { 
+			if ($opts{$opt}[1]) {
 				my $arg = $2 || shift @ARGV;
 				complain('--'.$opt, 2) unless defined $arg;
 				$args{$opt} .= ( $args{$opt} ? ' ' : '' ) . $arg;
@@ -44,7 +44,7 @@ while ((@ARGV) && ($ARGV[0] =~ /^-/)) {
 			my ($key) = grep { $opts{$_}[0] eq $o } keys %opts;
 			complain($o) unless $key;
 
-			if ($opts{$key}[1]) { 
+			if ($opts{$key}[1]) {
 				my $arg = shift @ARGV;
 				complain('-'.$o, 2) unless defined $arg;
 				$args{$key} .= ( $args{$key} ? ' ' : '' ).$arg; # join with whitespace
@@ -66,7 +66,7 @@ if ($args{help} || $args{usage}) {
 
 if ($args{version}) {
 	print "mimeopen $VERSION\n\n", << 'EOV';
-Copyright (c) 2005,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2005, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl.
 
@@ -98,7 +98,7 @@ die $@ if $@;
 if ($args{debug}) {
 	$File::MimeInfo::DEBUG++;
 	$File::MimeInfo::Magic::DEBUG++;
-	print	'> Data dirs are: ', join( ', ', 
+	print	'> Data dirs are: ', join( ', ',
 			$args{database}
 				? ( split /:/, $args{database} )
 				: (
@@ -108,7 +108,8 @@ if ($args{debug}) {
 		), "\n";
 }
 
-# --dereference
+# --dereference ## deprecated - so always true
+$args{dereference} = 1;
 if ($args{dereference}) {
 	eval 'use File::Spec';
 	die "Could not find perl module File::Spec\n" if $@;
@@ -135,10 +136,12 @@ unless (length $mimetype) {
 
 my ($default, @other) = mime_applications_all($mimetype);
 
-unless($default or @other) {
-	print STDERR "No applications found for mimetype: $mimetype\n";
-	exit 6;
-}
+## Removed this because user should always be able to select "Other..."
+#unless($default or @other) {
+#	print STDERR "No applications found for mimetype: $mimetype\n";
+#	exit 6;
+#}
+##
 
 if    ($args{'no-ask'}) {
 	$default = defined($default) ? $default : $other[0];
@@ -195,7 +198,7 @@ sub choose {
 	print "\nuse application #";
 	my $c = <STDIN>;
 	chomp $c;
-	
+
 	unless ($c =~ /^\d+$/) {
 		print STDERR "Cancelled\n";
 		exit 8;
@@ -282,13 +285,9 @@ Let the user choose a new default program for given files.
 
 =item B<-n>, B<--no-ask>
 
-Don't ask the user which program to use. Choose the default program or the 
-first program known to handle the file mimetype. This does not set the 
+Don't ask the user which program to use. Choose the default program or the
+first program known to handle the file mimetype. This does not set the
 default application.
-
-=item B<-L>, B<--dereference>
-
-Follow symbolic links.
 
 =item B<-M>, B<--magic-only>
 
@@ -318,6 +317,18 @@ Print the version of the program and exit.
 
 =back
 
+=head1 DEPRECATED OPTIONS
+
+=over 4
+
+=item B<-L>, B<--dereference>
+
+Follow symbolic links.
+Deprecated because this is the logical default for this command.
+Ignored silently.
+
+=back
+
 =head1 BUGS
 
 No known bugs, please mail the author if you find one.
@@ -331,7 +342,7 @@ Jaap Karssenberg E<lt>pardus@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2002 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2002, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl.
 
@@ -346,4 +357,3 @@ L<update-mime-database(1)>,
 L<update-desktop-database(1)>,
 L<File::MimeInfo(3)>,
 L<File::MimeInfo::Applications(3)>
-

@@ -18,7 +18,7 @@ BEGIN {
 our @ISA = qw(Exporter File::MimeInfo);
 our @EXPORT = qw(mimetype);
 our @EXPORT_OK = qw(extensions describe globs inodetype magic);
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 our $DEBUG;
 
 our $_hashed = 0;
@@ -29,15 +29,15 @@ our (@magic_80, @magic, $max_buffer);
 # filehandle in order to do magic mimetyping
 
 sub mimetype {
-	my $file = pop; 
+	my $file = pop;
 	croak 'subroutine "mimetype" needs a filename as argument' unless defined $file;
 
 	return magic($file) || default($file) if ref $file;
 	return &File::MimeInfo::mimetype($file) unless -s $file and -r _;
-	
+
 	my ($mimet, $fh);
 	return $mimet if $mimet = inodetype($file);
-	
+
 	($mimet, $fh) = _magic($file, \@magic_80); # high priority rules
 	return $mimet if $mimet;
 
@@ -55,7 +55,7 @@ sub magic {
 	croak 'subroutine "magic" needs a filename as argument' unless defined $file;
 	return undef unless ref($file) || -s $file;
 	print STDERR "> Checking all magic rules\n" if $DEBUG;
-	
+
 	my ($mimet, $fh) = _magic($file, \@magic_80, \@magic);
 	close $fh unless ref $file;
 
@@ -65,10 +65,10 @@ sub magic {
 sub _magic {
 	my ($file, @rules) = @_;
 	_rehash() unless $_hashed;
-	
+
 	my $fh;
 	unless (ref $file) {
-		open $fh, '<', $file || return undef;
+		open $fh, '<', $file or return undef;
 		binmode $fh;
 	}
 	else { $fh = $file }
@@ -96,7 +96,7 @@ sub _check_rule {
 		$fh->seek($$ref[0], SEEK_SET);	# seek offset
 		$fh->read($line, $$ref[1]);	# read max length
 	}
-	
+
 	# Match regex
 	$line = unpack 'b*', $line if $$ref[2];	# unpack to bits if using mask
 	return undef unless $line =~ $$ref[3];	# match regex
@@ -114,7 +114,7 @@ sub _check_rule {
 	return 0;
 }
 
-sub rehash { 
+sub rehash {
 	&File::MimeInfo::rehash();
 	&_rehash();
 	#use Data::Dumper;
@@ -150,7 +150,7 @@ sub _hash_magic {
 	<MAGIC> eq "MIME-Magic\x00\n"
 		or carp "Magic file '$file' doesn't seem to be a magic file";
 	my $line = 1;
-	while (<MAGIC>) { 
+	while (<MAGIC>) {
 		$line++;
 
 		if (/^\[(\d+):(.*?)\]\n$/) {
@@ -169,12 +169,12 @@ sub _hash_magic {
 
 		my $v = substr $_, 0, $l, ''; # value
 
-		/^(?:&(.{$l}))?(?:~(\d+))?(?:\+(\d+))?\n$/s 
+		/^(?:&(.{$l}))?(?:~(\d+))?(?:\+(\d+))?\n$/s
 			|| warn "$file line $line skipped\n" && next;
 		my ($m, $w, $r) = ($1, $2 || 1, $3 || 1);
 		                  # mask, word size, range
 		my $mdef = defined $m;
-		
+
 		# possible big endian to little endian conversion
 		# as a bonus perl also takes care of weird endian cases
 		if ( $w != 1 ) {
@@ -200,7 +200,7 @@ sub _hash_magic {
 		$r *= 8 if $mdef; # bytes => bits for matching a mask
 		my $reg = '^'
 			. ( $r    ? "(.{0,$r}?)" : '()'           )
-			. ( $mdef ? '('. _mask_regex($v, $m) .')'  
+			. ( $mdef ? '('. _mask_regex($v, $m) .')'
 			          : '('. quotemeta($v)       .')' ) ;
 		push @$ref, [
 			$o, $end,    # offset, offset+length+range
@@ -262,7 +262,7 @@ File::MimeInfo::Magic - Determine file type with magic
 
 =head1 DESCRIPTION
 
-This module inherits from L<File::MimeInfo>, it is transparant
+This module inherits from L<File::MimeInfo>, it is transparent
 to its functions but adds support for the freedesktop magic file.
 
 Magic data is hashed when you need it for the first time.
@@ -270,7 +270,7 @@ If you want to force hashing earlier use the C<rehash()> function.
 
 =head1 EXPORT
 
-The method C<mimetype> is exported by default. The methods C<magic>, 
+The method C<mimetype> is exported by default. The methods C<magic>,
 C<inodetype>, C<globs> and C<describe> can be exported on demand.
 
 =head1 METHODS
@@ -298,10 +298,10 @@ are used. See below for details.
 
 =item C<magic($file)>
 
-Returns a mime-type string for C<$file> based on the magic rules, 
+Returns a mime-type string for C<$file> based on the magic rules,
 returns undef on failure.
 
-C<$file> can be an object reference, in that case it is supposed to have a 
+C<$file> can be an object reference, in that case it is supposed to have a
 C<seek()> and a C<read()> method. This allows you for example to determine
 the mimetype of data in memory by using L<IO::Scalar>.
 
@@ -310,7 +310,7 @@ the C<:utf8> binmode yourself if apropriate.
 
 =item C<rehash()>
 
-Rehash the data files. Glob and magic 
+Rehash the data files. Glob and magic
 information is preparsed when this method is called.
 
 If you want to by-pass the XDG basedir system you can specify your database
@@ -346,9 +346,8 @@ Please mail the author when you encounter any bugs.
 
 =head1 AUTHOR
 
-Jaap Karssenberg || Pardus [Larus] E<lt>pardus@cpan.orgE<gt>
+Jaap Karssenberg E<lt>pardus@cpan.orgE<gt>
 
-Copyright (c) 2003,2008 Jaap G Karssenberg. All rights reserved.
+Copyright (c) 2003, 2012 Jaap G Karssenberg. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
-

@@ -2,9 +2,11 @@
 abstract: 'Determine file type'
 author:
   - 'Jaap Karssenberg <pardus@cpan.org>'
+build_requires: {}
 configure_requires:
-  Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
+  Module::Build: 0.40
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -13,16 +15,16 @@ name: File-MimeInfo
 provides:
   File::MimeInfo:
     file: lib/File/MimeInfo.pm
-    version: 0.16
+    version: 0.17
   File::MimeInfo::Applications:
     file: lib/File/MimeInfo/Applications.pm
-    version: 0.16
+    version: 0.17
   File::MimeInfo::Magic:
     file: lib/File/MimeInfo/Magic.pm
-    version: 0.16
+    version: 0.17
   File::MimeInfo::Rox:
     file: lib/File/MimeInfo/Rox.pm
-    version: 0.16
+    version: 0.17
 requires:
   Carp: 0
   Exporter: 0
@@ -32,4 +34,4 @@ requires:
   Pod::Usage: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.16
+version: 0.17

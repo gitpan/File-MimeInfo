@@ -1,10 +1,10 @@
 {
-   "abstract" : "Determine file type",
+   "abstract" : "Determine file types",
    "author" : [
       "Jaap Karssenberg <pardus@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4005, CPAN::Meta::Converter version 2.132140",
+   "generated_by" : "ExtUtils::MakeMaker version 6.78, CPAN::Meta::Converter version 2.132661",
    "license" : [
       "perl_5"
    ],
@@ -13,13 +13,14 @@
       "version" : "2"
    },
    "name" : "File-MimeInfo",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ]
+   },
    "prereqs" : {
-      "configure" : {
-         "requires" : {
-            "Module::Build" : "0.40"
-         }
-      },
-      "runtime" : {
+      "build" : {
          "requires" : {
             "Carp" : "0",
             "Exporter" : "0",
@@ -28,31 +29,23 @@
             "File::DesktopEntry" : "0.04",
             "Pod::Usage" : "0"
          }
-      }
-   },
-   "provides" : {
-      "File::MimeInfo" : {
-         "file" : "lib/File/MimeInfo.pm",
-         "version" : "0.18"
       },
-      "File::MimeInfo::Applications" : {
-         "file" : "lib/File/MimeInfo/Applications.pm",
-         "version" : "0.18"
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
       },
-      "File::MimeInfo::Magic" : {
-         "file" : "lib/File/MimeInfo/Magic.pm",
-         "version" : "0.18"
-      },
-      "File::MimeInfo::Rox" : {
-         "file" : "lib/File/MimeInfo/Rox.pm",
-         "version" : "0.18"
+      "runtime" : {
+         "requires" : {
+            "perl" : "5.006001"
+         }
       }
    },
    "release_status" : "stable",
    "resources" : {
-      "license" : [
-         "http://dev.perl.org/licenses/"
-      ]
+      "repository" : {
+         "url" : "https://github.com/mbeijen/File-MimeInfo"
+      }
    },
-   "version" : "0.18"
+   "version" : "0.19"
 }

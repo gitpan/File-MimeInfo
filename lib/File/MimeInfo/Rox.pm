@@ -10,7 +10,7 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(mime_exec mime_system);
 our @EXPORT_OK = qw(suggest_script_name);
 our %EXPORT_TAGS = (magic => \@EXPORT);
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 our @choicespath = (
 	config_home('rox.sourceforge.net'),
 	File::Spec->catdir($ENV{HOME}, 'Choices'),
@@ -135,12 +135,12 @@ C<$ENV{HOME}/Choices:/usr/local/share/Choices:/usr/share/Choices>
 
 Try to open C<$file> with the appropriate program for files of
 it's mimetype. You can use C<$mimetype> to force the mimetype.
-Also if you allready know the mimetype it saves a lot of time
+Also if you already know the mimetype it saves a lot of time
 to just tell it.
 
-If either the mimetype couldn't be determinated or
+If either the mimetype couldn't be determined or
 no appropriate program could be found C<undef> is returned.
-If the actual L<system> failes an exception is raised.
+If the actual L<system> fails an exception is raised.
 
 All remaining arguments are passed on to the handler.
 

@@ -1,4 +1,3 @@
-
 package File::MimeInfo::Magic;
 
 use strict;
@@ -18,7 +17,7 @@ BEGIN {
 our @ISA = qw(Exporter File::MimeInfo);
 our @EXPORT = qw(mimetype);
 our @EXPORT_OK = qw(extensions describe globs inodetype magic);
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 our $DEBUG;
 
 our $_hashed = 0;
@@ -306,7 +305,7 @@ C<seek()> and a C<read()> method. This allows you for example to determine
 the mimetype of data in memory by using L<IO::Scalar>.
 
 Be aware that when using a filehandle or an C<IO::> object you need to set
-the C<:utf8> binmode yourself if apropriate.
+the C<:utf8> binmode yourself if appropriate.
 
 =item C<rehash()>
 

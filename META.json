@@ -4,7 +4,7 @@
       "Jaap Karssenberg <pardus@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.86, CPAN::Meta::Converter version 2.132830",
+   "generated_by" : "ExtUtils::MakeMaker version 6.8, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -50,5 +50,5 @@
          "url" : "https://github.com/mbeijen/File-MimeInfo"
       }
    },
-   "version" : "0.22"
+   "version" : "0.23"
 }

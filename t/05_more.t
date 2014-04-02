@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 $ENV{XDG_DATA_HOME} = './t/';
 $ENV{XDG_DATA_DIRS} = './t/'; # forceing non default value
@@ -44,5 +44,11 @@ SKIP: {
 		'mime_application() works'
 	);
 	ok ( $other[0]->{file} =~ /foo\.desktop$/, "desktop file is the right one" );
+    my ($default, @other) = mime_applications('image/svg+xml');
+    is (
+        $other[0]->{file},
+        't/applications/mirage.desktop',
+        "desktop file is the right one"
+    );
 }
 

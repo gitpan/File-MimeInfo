@@ -27,4 +27,4 @@ requires:
 resources:
   bugtracker: https://github.com/mbeijen/File-MimeInfo/issues
   repository: https://github.com/mbeijen/File-MimeInfo
-version: 0.24
+version: 0.25

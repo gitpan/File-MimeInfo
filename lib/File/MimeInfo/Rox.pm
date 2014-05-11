@@ -10,7 +10,7 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(mime_exec mime_system);
 our @EXPORT_OK = qw(suggest_script_name);
 our %EXPORT_TAGS = (magic => \@EXPORT);
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 our @choicespath = (
 	config_home('rox.sourceforge.net'),
 	File::Spec->catdir($ENV{HOME}, 'Choices'),
@@ -174,6 +174,6 @@ modify it under the same terms as Perl itself.
 
 L<File::MimeInfo>,
 L<File::MimeInfo::Magic>,
-L<http://rox.sourceforce.net>
+L<http://rox.sourceforge.net>
 
 =cut

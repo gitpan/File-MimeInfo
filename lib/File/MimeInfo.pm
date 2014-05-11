@@ -10,7 +10,7 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mimetype);
 our @EXPORT_OK = qw(extensions describe globs inodetype mimetype_canon mimetype_isa);
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 our $DEBUG;
 
 our ($_hashed, $_hashed_aliases, $_hashed_subclasses);
@@ -163,7 +163,7 @@ sub _hash_globs {
 		($string, $glob) = split /:/, $_, 2;
 		unless ($glob =~ /[\?\*\[]/) { $literal{$glob} = $string }
 		elsif ($glob =~ /^\*\.(\w+(\.\w+)*)$/) {
-		    $extension{$1} = $string;
+		    $extension{$1} = $string unless exists $extension{$1};
 		    $mime2ext{$string} = [] if !defined($mime2ext{$string});
 		    push @{$mime2ext{$string}}, $1;
 		} else { unshift @globs, [$glob, _glob_to_regexp($glob), $string] }
